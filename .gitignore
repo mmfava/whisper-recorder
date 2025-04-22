@@ -1,0 +1,25 @@
+# Virtual environment directories
+venv/
+.venv/
+other/
+
+# Output recordings and artifacts
+gravações/
+
+## Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+.pytest_cache/
+.mypy_cache/
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# MacOS
+.DS_Store
+# Editor directories
+.vscode/
+*.swp
