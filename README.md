@@ -1,74 +1,94 @@
 # whisper-recorder
 
-Recorder and transcriber tool using Whisper for local transcription and optional GPT-4o summarization.
+Ferramenta de gravação e transcrição de áudio local utilizando o modelo Whisper, com suporte opcional à geração de resumos estruturados via GPT-4o.
 
-## Installation
+## 🛠️ Instalação
 
-Install dependencies using pip:
+Instale as dependências com `pip`:
+
 ```bash
-# (optional) create and activate a virtual environment
+# (opcional) crie e ative um ambiente virtual
 python3 -m venv .venv
 source .venv/bin/activate
 
-# install runtime requirements
+# instale as dependências principais
 pip install -r requirements.txt
 
-# install the package in editable mode
+# instale o pacote em modo editável
 pip install -e .
 
-# install development requirements (pytest)
+# instale dependências de desenvolvimento (ex: pytest)
 pip install -r requirements-dev.txt
 ```
 
-## Usage
+## 🚀 Uso
 
-Initialize hardware configuration:
+Inicialize a configuração de hardware:
+
 ```bash
 whisper-recorder setup [--force]
 ```
 
-- Other commands available:
-  - `whisper-recorder record --segment-sec N`  # record audio with optional segment length
-  - `whisper-recorder transcribe [--model MODEL] [--delete-raw] [--fast] [--use-api]`  # use local Whisper model or OpenAI Whisper API
-  - `whisper-recorder summarize --mode reunião|curso|custom [-p "Prompt..."]`
-    # generate structured summary:
-    #   modo 'reunião'  → lista tópicos, decisões e ações
-    #   modo 'curso'     → texto técnico com diagramas Mermaid e blocos de código
-    #   modo 'custom'    → usa prompt personalizado fornecido pelo usuário
-  - `whisper-recorder run`  (executa pipeline completo: record → transcribe → summarize)
+### 📦 Comandos disponíveis
 
-### Output Directory
+- `whisper-recorder record --segment-sec N`  
+  Grava áudio com duração segmentada em `N` segundos.
 
-All generated files (raw audio segments, transcription JSON/TXT, summaries, logs and metrics) are saved under the
-`gravações/YYYY-MM-DD_HH-MM-SS/` directory. This directory is gitignored by default and should not be committed.
+- `whisper-recorder transcribe [--model MODEL] [--delete-raw] [--fast] [--use-api]`  
+  Transcreve o áudio usando o modelo local do Whisper ou a API da OpenAI.
 
-If you have already added or committed this directory (or the local virtualenv `other/`), you can untrack them:
+- `whisper-recorder summarize --mode reunião|curso|custom [-p "Prompt..."]`  
+  Gera resumo estruturado com base no tipo de conteúdo:
+  - `reunião`: lista tópicos, decisões e ações
+  - `curso`: texto técnico com blocos de código e diagramas Mermaid
+  - `custom`: permite usar um prompt personalizado
+
+- `whisper-recorder run`  
+  Executa o pipeline completo: gravação → transcrição → resumo
+
+### 📂 Diretório de saída
+
+Todos os arquivos gerados (áudio bruto, transcrições em JSON/TXT, resumos, logs e métricas) são salvos em:
+
+```
+gravações/YYYY-MM-DD_HH-MM-SS/
+```
+
+Este diretório está incluído no `.gitignore` por padrão. Se já tiver adicionado esse diretório (ou o ambiente virtual em `other/`), você pode removê-lo do controle de versão com:
+
 ```bash
 git rm -r --cached gravações other
-```  
+```
 
-## Managing with uv
-If you use `uv` as your project manager, the `pyproject.toml` has PEP 621 metadata:
+## ⚡ Uso com `uv`
 
-1. Install or upgrade `uv` (see https://docs.astral.sh/uv):
+Se estiver utilizando o [uv](https://docs.astral.sh/uv) como gerenciador de projetos, o arquivo `pyproject.toml` já está configurado com metadados PEP 621.
+
+1. Instale ou atualize o `uv`:
    ```bash
    pip install uv
-   # or use the standalone installer
+   # ou utilize o instalador standalone
    ```
-2. Install dependencies and create the virtual environment:
+
+2. Instale as dependências e crie o ambiente virtual:
    ```bash
-   uv lock       # generate lockfile from pyproject.toml
-   uv sync       # install dependencies into .venv
+   uv lock       # gera o arquivo de lock
+   uv sync       # instala as dependências no .venv
    ```
-3. Run CLI commands through `uv run` (auto-activates .venv):
+
+3. Execute os comandos via `uv run`:
    ```bash
    uv run whisper-recorder setup --force
-   uv run whisper-recorder record --segment-sec 5  # record from microphone, segment length 5s
-   uv run whisper-recorder record --youtube-url https://www.youtube.com/watch?v=0mtXae5HhTE --segment-sec 120  # download and segment YouTube audio
-   uv run whisper-recorder transcribe --fast          # fast inference using 'small' model
-   uv run whisper-recorder transcribe --model medium  # use specific model
-   uv run whisper-recorder transcribe --use-api       # transcription via OpenAI Whisper API
-   uv run whisper-recorder summarize --mode reunião   # generate meeting summary
-   uv run whisper-recorder summarize --mode curso     # generate course summary
-   uv run whisper-recorder summarize --mode custom -p "Seu prompt aqui"  # custom summary via prompt
+
+   uv run whisper-recorder record --segment-sec 5
+   uv run whisper-recorder record --youtube-url https://www.youtube.com/watch?v=0mtXae5HhTE --segment-sec 120
+
+   uv run whisper-recorder transcribe --fast
+   uv run whisper-recorder transcribe --model medium
+   uv run whisper-recorder transcribe --use-api
+
+   uv run whisper-recorder summarize --mode reunião
+   uv run whisper-recorder summarize --mode curso
+   uv run whisper-recorder summarize --mode custom -p "Seu prompt aqui"
    ```
+
